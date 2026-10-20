@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Admin - PMI Kota Batam</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body{font-family:Poppins,sans-serif;background:#f9f9f9;margin:0;padding:0}
+.wrap{width:92%;max-width:1100px;margin:20px auto}
+.tab{padding:8px 16px;border:1px solid #ddd;background:#fff;border-radius:20px;font-size:13px;cursor:pointer;font-weight:500}
+.tab.active{background:#b91c1c;color:#fff;border-color:#b91c1c}
+.card{background:#fff;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 4px 20px rgba(0,0,0,.04)}
+input,textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin-top:6px;font-size:13px;box-sizing:border-box}
+.btn{background:#b91c1c;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:12px}
+label{font-size:13px;font-weight:600;margin-top:12px;display:block}
+.grid{ display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2 style="margin:0">Halo, Pmikotabatam2026</h2>
+  <p style="margin:4px 0 0;color:#888;font-size:12px">Dashboard Admin UDD PMI Kota Batam</p>
+
+  <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+    <button class="tab active" onclick="openTab(1)" id="t1">1. Update Stok Darah</button>
+    <button class="tab" onclick="openTab(2)" id="t2">2. Jadwal Pelayanan</button>
+    <button class="tab" onclick="openTab(3)" id="t3">3. Katalog Produk</button>
+  </div>
+
+  <!-- TAB 1 -->
+  <div id="tab1" class="card">
+    <h3 style="margin:0">Update Stok Darah</h3>
+    <div class="grid" style="margin-top:14px">
+      <div><label>Gol A</label><input id="stokA" type="number" value="120"></div>
+      <div><label>Gol B</label><input id="stokB" type="number" value="150"></div>
+      <div><label>Gol AB</label><input id="stokAB" type="number" value="80"></div>
+      <div><label>Gol O</label><input id="stokO" type="number" value="225"></div>
+    </div>
+    <button class="btn" onclick="saveStok()">Simpan Stok Darah</button>
+  </div>
+
+  <!-- TAB 2 -->
+  <div id="tab2" class="card" style="display:none">
+    <h3 style="margin:0">Tambah Jadwal Pelayanan</h3>
+    <label>Tanggal</label><input id="jTgl" type="date">
+    <label>Jam</label><input id="jJam" type="time">
+    <label>Lokasi / Kegiatan</label><input id="jLok" placeholder="Contoh: Mall Botania 2">
+    <button class="btn" onclick="addJadwal()">Tambah Jadwal</button>
+  </div>
+
+  <!-- TAB 3 -->
+  <div id="tab3" class="card" style="display:none">
+    <h3 style="margin:0">Update Katalog Produk</h3>
+    <label>Nama Produk</label><input id="pNama" placeholder="Kantong Darah Double">
+    <div class="grid">
+      <div><label>Harga</label><input id="pHarga" placeholder="Rp 150.000"></div>
+      <div><label>Stok</label><input id="pStok" type="number" placeholder="100"></div>
+    </div>
+    <label>Deskripsi</label><textarea id="pDesc" rows="3"></textarea>
+    <button class="btn" onclick="addProduk()">Tambah Produk</button>
+  </div>
+
+  <a href="../index.html" style="display:inline-block;margin-top:20px;font-size:12px;color:#b91c1c;text-decoration:none">← Kembali ke Beranda & Logout</a>
+</div>
+
+<script>
+function openTab(n){
+  document.getElementById('tab1').style.display = n==1?'block':'none';
+  document.getElementById('tab2').style.display = n==2?'block':'none';
+  document.getElementById('tab3').style.display = n==3?'block':'none';
+  document.getElementById('t1').classList.toggle('active',n==1);
+  document.getElementById('t2').classList.toggle('active',n==2);
+  document.getElementById('t3').classList.toggle('active',n==3);
+  if(n==3 && new URLSearchParams(window.location.search).get('tab')!='3'){
+    // kalau klik dari screenshot kamu yang tab 3
+    document.getElementById('tab3').style.display='block';
+  }
+}
+function saveStok(){
+  const data={A:stokA.value,B:stokB.value,AB:stokAB.value,O:stokO.value};
+  localStorage.setItem('pmi_stok', JSON.stringify(data));
+  alert('Stok berhasil disimpan! Total di beranda akan jadi '+(parseInt(data.A)+parseInt(data.B)+parseInt(data.AB)+parseInt(data.O))+' kantong');
+}
+function addJadwal(){ alert('Jadwal '+jLok.value+' berhasil ditambah (simulasi)'); }
+function addProduk(){ alert('Produk '+pNama.value+' berhasil ditambah (simulasi)'); }
+
+// buka tab sesuai URL ?tab=3 biar pas kayak screenshot kamu langsung kebuka katalog
+const urlTab = new URLSearchParams(window.location.search).get('tab');
+if(urlTab) openTab(parseInt(urlTab));
+</script>
+</body>
+</html>
